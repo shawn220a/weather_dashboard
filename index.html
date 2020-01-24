@@ -1,35 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-  <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reset.css" />
 
-  <title>Weather Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
 
-  <style>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
 
-    .header {
-      background-color: slategray;
-      height: 4rem;
-    }
+    <title>Weather Dashboard</title>
 
-    .header h1 {
-      text-align: center;
-      color: white;
-      font-size: 3em;
-      font-weight: bold;
-      padding-top: 5px;
-    }
+    <style>
+      .header {
+        background-color: slategray;
+        height: 4rem;
+      }
 
-  </style>
+      .header h1 {
+        text-align: center;
+        color: white;
+        font-size: 3em;
+        padding-top: 5px;
+      }
 
-</head>
-<body>
-  <div class="header">
-    <h1>Weather Dashboard</h1>
-  </div>
-</body>
+      .searchBar {
+        margin-top: 1em;
+        margin-left: 2em;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Weather Dashboard</h1>
+    </div>
+    <div class="row">
+      <div class="col-2 searchBar">
+        <h3>Search for a city:</h3>
+        <input type="text" id="search" />
+        <button>search</button>
+      </div>
+      <div class="col">
+        <div class="row currentForcast">
+          <h2></h2>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function() {
+        $("button").click(function() {
+          event.preventDefault();
+
+          // const API_KEY = 'ef520636f39c506ecb6d5946a35d006b';
+          // const units = '&units=imperial';
+          // const currentWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
+          let search = $("#search").val();
+          let queryURL =
+            "https://api.openweathermap.org/data/2.5/weather?q=" +
+            search +
+            "&appid=ef520636f39c506ecb6d5946a35d006b";
+
+          $.ajax({
+            url: queryURL,
+            method: "GET"
+          }).then(function(response) {
+            console.log(response);
+          });
+        });
+      });
+    </script>
+  </body>
 </html>
