@@ -15,10 +15,10 @@
     />
 
     <script
-      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-      crossorigin="anonymous"
-    ></script>
+    src="https://code.jquery.com/jquery-3.4.1.js"
+    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
       integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -61,6 +61,7 @@
         <h3>Search for a city:</h3>
         <input type="text" id="search" />
         <button>search</button>
+        <div></div>
       </div>
       <div class="col">
         <div class="row currentForcast">
@@ -71,23 +72,31 @@
 
     <script>
       $(document).ready(function() {
+
+        
+        
+
         $("button").click(function() {
           event.preventDefault();
-
-          // const API_KEY = 'ef520636f39c506ecb6d5946a35d006b';
-          // const units = '&units=imperial';
-          // const currentWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
+          
+          const API_KEY = '&appid=ef520636f39c506ecb6d5946a35d006b';
+          const units = '&units=imperial';
+          const currentWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
+          
           let search = $("#search").val();
-          let queryURL =
-            "https://api.openweathermap.org/data/2.5/weather?q=" +
-            search +
-            "&appid=ef520636f39c506ecb6d5946a35d006b";
+          let queryURLOne = currentWeatherURL + search + API_KEY + units;
 
+
+          console.log(queryURLOne);
           $.ajax({
-            url: queryURL,
+            url: queryURLOne,
             method: "GET"
-          }).then(function(response) {
-            console.log(response);
+          }).then((response) => {
+            $('.currentForcast h2').text(response.name + " " + moment.format("MMM Do YYYY"));
+            console.log(response.name);
+            console.log(response.main.temp + " F");
+            console.log(response.main.humidity + "%");
+            console.log(response.wind.speed + " MPH");
           });
         });
       });
