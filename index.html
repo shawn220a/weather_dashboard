@@ -15,9 +15,10 @@
     />
 
     <script
-    src="https://code.jquery.com/jquery-3.4.1.js"
-    integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
@@ -48,7 +49,11 @@
       .searchBar {
         margin-top: 1em;
         margin-left: 2em;
-        border: 1px solid black;
+      }
+
+      .currentForcast {
+        margin-top: 1em;
+        margin-left: 1em;
       }
     </style>
   </head>
@@ -65,38 +70,47 @@
       </div>
       <div class="col">
         <div class="row currentForcast">
-          <h2></h2>
+          <ul id="current">
+            <h3 id="name"></h3>
+            <p id="temp"></p>
+            <p id="humidity"></p>
+            <p id="winds"></p>
+            <p id="uv"></p>
+          </ul>
         </div>
       </div>
     </div>
 
     <script>
       $(document).ready(function() {
-
-        
-        
+        const API_KEY = "ef520636f39c506ecb6d5946a35d006b";
+        const units = "&units=imperial";
+        const currentWeatherURL = "http://api.openweathermap.org/data/2.5/weather?q=";
+        const uvURL = "http://api.openweathermap.org/data/2.5/uvi?appid=";
 
         $("button").click(function() {
           event.preventDefault();
-          
-          const API_KEY = '&appid=ef520636f39c506ecb6d5946a35d006b';
-          const units = '&units=imperial';
-          const currentWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
-          
+
           let search = $("#search").val();
-          let queryURLOne = currentWeatherURL + search + API_KEY + units;
+          let queryURLOne = currentWeatherURL + search + '&appid=' + API_KEY + units;
 
-
-          console.log(queryURLOne);
           $.ajax({
             url: queryURLOne,
             method: "GET"
-          }).then((response) => {
-            $('.currentForcast h2').text(response.name + " " + moment.format("MMM Do YYYY"));
-            console.log(response.name);
-            console.log(response.main.temp + " F");
-            console.log(response.main.humidity + "%");
-            console.log(response.wind.speed + " MPH");
+          }).then(response => {
+            $("#name").text(response.name + " " + moment().format("MMM Do YYYY"));
+            $('#temp').text('Temperature: ' + response.main.temp + ' F');
+            $("#humidity").text("Humidity: " + response.main.humidity + "%");
+            $('#winds').text('Wind Speed: ' + response.wind.speed + " MPH");
+
+            let queryURLTwo = uvURL + API_KEY + '&lat=' + response.coord.lat + '&lon=' + response.coord.lon;
+
+            $.ajax({
+              url: queryURLTwo,
+              method: 'GET'
+            }).then(response => {
+              $('#uv').text('UV Index: ' + response.value);
+            })
           });
         });
       });
