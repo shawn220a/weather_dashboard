@@ -86,15 +86,11 @@
         <hr />
 
         <!-- 5 Day Forcast -->
-        <div class="row fiveForcast">
+        <div class="row fiveForecast">
           <h3>5 Day Forecast:</h3>
         </div>
         <div class="row">
           <table id="forecastTable" width="960">
-            <th>City</th>
-            <th>Date & Time</th>
-            <th>Temperature</th>
-            <th>Humidity</th>
           </table>
         </div>
       </div>
@@ -104,18 +100,21 @@
       $(document).ready(function() {
         const API_KEY = "ef520636f39c506ecb6d5946a35d006b";
         const units = "&units=imperial";
-        const currentWeatherURL =
-          "http://api.openweathermap.org/data/2.5/weather?q=";
+        const currentWeatherURL = "http://api.openweathermap.org/data/2.5/weather?q=";
         const uvURL = "http://api.openweathermap.org/data/2.5/uvi?appid=";
-        const forcastURL =
-          "http://api.openweathermap.org/data/2.5/forecast?id=";
+        const forcastURL = "http://api.openweathermap.org/data/2.5/forecast?id=";
+
+        $('hr').hide();
+        $('.fiveForecast').hide();
 
         $("button").click(function() {
           event.preventDefault();
 
           let search = $("#search").val();
-          let queryURLOne =
-            currentWeatherURL + search + "&appid=" + API_KEY + units;
+          let queryURLOne = currentWeatherURL + search + "&appid=" + API_KEY + units;
+
+          
+          $('tr').empty();
 
           // Request the Current Forecast
           $.ajax({
@@ -145,6 +144,7 @@
               method: "GET"
             }).then(response => {
               $("#cUV").text("UV Index: " + response.value);
+              $('hr').show();
             });
 
             //  Request the 5 day Forcast by ID
@@ -152,8 +152,19 @@
               url: queryURLThree,
               method: "GET"
             }).then(response => {
+              $('.fiveForecast').show();
               const i = [0, 8, 16, 24, 32];
 
+              $("#forecastTable").append(
+                  $("<tr></tr>").append(
+                    $("<th></th>").text('City'),
+                    $("<th></th>").text('Date & Time'),
+                    $("<th></th>").text('Temperature'),
+                    $("<th></th>").text('Humidity')
+                  )
+                );
+
+              
               for (x of i) {
                 $("#forecastTable").append(
                   $("<tr></tr>").append(
