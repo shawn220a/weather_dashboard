@@ -55,6 +55,10 @@
         margin-top: 1em;
         margin-left: 1em;
       }
+
+      #forecastTable th {
+        font-weight: bold;
+      }
     </style>
   </head>
   <body>
@@ -79,74 +83,88 @@
           </ul>
         </div>
 
-        <hr>
+        <hr />
 
         <!-- 5 Day Forcast -->
         <div class="row fiveForcast">
-          <div class="col">
-            <ul>
-              <li id="fName"></li>
-              <li id="fDate"></li>
-              <li id="fTemp"></li>
-              <li id="fHumidity"></li>
-            </ul>
-          </div>
+          <h3>5 Day Forecast:</h3>
+        </div>
+        <div class="row">
+          <table id="forecastTable" width="960">
+            <th>City</th>
+            <th>Date & Time</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+          </table>
         </div>
       </div>
     </div>
 
     <script>
       $(document).ready(function() {
-        const API_KEY = 'ef520636f39c506ecb6d5946a35d006b';
-        const units = '&units=imperial';
-        const currentWeatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=';
-        const uvURL = 'http://api.openweathermap.org/data/2.5/uvi?appid=';
-        const forcastURL = 'http://api.openweathermap.org/data/2.5/forecast?id=';
+        const API_KEY = "ef520636f39c506ecb6d5946a35d006b";
+        const units = "&units=imperial";
+        const currentWeatherURL =
+          "http://api.openweathermap.org/data/2.5/weather?q=";
+        const uvURL = "http://api.openweathermap.org/data/2.5/uvi?appid=";
+        const forcastURL =
+          "http://api.openweathermap.org/data/2.5/forecast?id=";
 
         $("button").click(function() {
           event.preventDefault();
 
           let search = $("#search").val();
-          let queryURLOne = currentWeatherURL + search + '&appid=' + API_KEY + units;
+          let queryURLOne =
+            currentWeatherURL + search + "&appid=" + API_KEY + units;
 
           // Request the Current Forecast
           $.ajax({
             url: queryURLOne,
-            method: 'GET'
+            method: "GET"
           }).then(response => {
-            $("#cName").text(response.name + ' ' + moment().format('MMM Do YYYY'));
-            $('#cTemp').text('Temperature: ' + response.main.temp + ' F');
-            $("#cHumidity").text('Humidity: ' + response.main.humidity + '%');
-            $('#cWinds').text('Wind Speed: ' + response.wind.speed + ' MPH');
+            $("#cName").text(
+              response.name + " " + moment().format("MMM Do YYYY")
+            );
+            $("#cTemp").text("Temperature: " + response.main.temp + " F");
+            $("#cHumidity").text("Humidity: " + response.main.humidity + "%");
+            $("#cWinds").text("Wind Speed: " + response.wind.speed + " MPH");
 
-            let queryURLTwo = uvURL + API_KEY + '&lat=' + response.coord.lat + '&lon=' + response.coord.lon;
-            let queryURLThree = forcastURL + response.id + units + '&appid=' + API_KEY;
+            let queryURLTwo =
+              uvURL +
+              API_KEY +
+              "&lat=" +
+              response.coord.lat +
+              "&lon=" +
+              response.coord.lon;
+            let queryURLThree =
+              forcastURL + response.id + units + "&appid=" + API_KEY;
 
             // Request the UV Index by Lat and Lon
             $.ajax({
               url: queryURLTwo,
-              method: 'GET'
+              method: "GET"
             }).then(response => {
-              $('#cUV').text('UV Index: ' + response.value);
+              $("#cUV").text("UV Index: " + response.value);
             });
 
             //  Request the 5 day Forcast by ID
             $.ajax({
               url: queryURLThree,
-              method: 'GET'
-            }).then( response => {
+              method: "GET"
+            }).then(response => {
               const i = [0, 8, 16, 24, 32];
 
-              $('.fiveForecast').empty();
-
               for (x of i) {
-                $('#fName').append(response.city.name + ' ');
-                $('#fDate').append(response.list[x].dt_txt + ' ');
-                $('#fTemp').append('Temperature: ' + response.list[x].main.temp + ' F' + ' ');
-                $('#fHumidity').append('Humidity: ' + response.list[x].main.humidity + '%' + ' ');
+                $("#forecastTable").append(
+                  $("<tr></tr>").append(
+                    $("<td></td>").append(response.city.name),
+                    $("<td></td>").append(response.list[x].dt_txt),
+                    $("<td></td>").append(response.list[x].main.temp + " F"),
+                    $("<td></td>").append(response.list[x].main.humidity + "%")
+                  )
+                );
               }
             });
-
           });
         });
       });
