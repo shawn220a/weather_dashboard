@@ -15,7 +15,12 @@
   margin-left: 2em;
 }
 
-.currentForcast {
+.currentForecast {
+  margin-top: 1em;
+  margin-left: 1em;
+}
+
+.fiveForecast {
   margin-top: 1em;
   margin-left: 1em;
 }
