@@ -141,11 +141,13 @@
 
               
               for (x of i) {
+                let img = $("<img>");
+                img.attr("src", 'http://openweathermap.org/img/w/' +response.list[x].weather[0].icon + '.png');
                 $("#forecastTable").append(
                   $("<tr></tr>").append(
                     $("<td></td>").append(response.city.name),
                     $("<td></td>").append(response.list[x].dt_txt),
-                    $("<td></td>").append(response.list[x].weather[0].icon),
+                    $("<td></td>").append(img),
                     $("<td></td>").append(response.list[x].main.temp + " F"),
                     $("<td></td>").append(response.list[x].main.humidity + "%")
                   )
